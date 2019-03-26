@@ -1,20 +1,41 @@
 # This file is responsible for configuring your application
 # and its dependencies with the aid of the Mix.Config module.
+#
+# This configuration file is loaded before any dependency and
+# is restricted to this project.
+
+# General application configuration
 use Mix.Config
 
-# By default, the umbrella project as well as each child
-# application will require this configuration file, as
-# configuration and dependencies are shared in an umbrella
-# project. While one could configure all applications here,
-# we prefer to keep the configuration of each individual
-# child application in their own app, but all other
-# dependencies, regardless if they belong to one or multiple
-# apps, should be configured in the umbrella to avoid confusion.
-import_config "../apps/*/config/config.exs"
+config :weatherserviceel,
+       :mongodb_connection,
+       url: "mongodb://nucsrv.lan:27017/weatherservice"
 
-# Sample configuration (overrides the imported configuration above):
-#
-#     config :logger, :console,
-#       level: :info,
-#       format: "$date $time [$level] $metadata$message\n",
-#       metadata: [:user_id]
+# Configures the endpoint
+config :weatherserviceel,
+       WSEWeb.Endpoint,
+       url: [
+         host: "localhost"
+       ],
+       secret_key_base: "YgHl89EOG1FTqtj/xTL2squUpVjkqV4yiN31N+8u/zyNNztNZuIBF+SFJNsZdtgh",
+       render_errors: [
+         view: WSEWeb.ErrorView,
+         accepts: ~w(json)
+       ],
+       pubsub: [
+         name: WSE.PubSub,
+         adapter: Phoenix.PubSub.PG2
+       ]
+
+# Configures Elixir's Logger
+config :logger,
+       :console,
+       format: "$time $metadata[$level] $message\n",
+       metadata: [:request_id]
+
+# Use Jason for JSON parsing in Phoenix
+config :phoenix, :json_library, Jason
+
+# Import environment specific config. This must remain at the bottom
+# of this file so it overrides the configuration defined above.
+import_config "#{Mix.env()}.exs"
