@@ -11,6 +11,12 @@ config :weatherserviceel,
        :mongodb_connection,
        url: "mongodb://nucsrv.lan:27017/weatherservice"
 
+config :weatherserviceel,
+       :app_config,
+       owm_api_key: "",
+       request_limiter_period_duration_in_sec: 1,
+       request_limiter_req_per_sec: 1
+
 # Configures the endpoint
 config :weatherserviceel,
        WSEWeb.Endpoint,
@@ -35,6 +41,8 @@ config :logger,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+config :tesla, adapter: Tesla.Adapter.Hackney
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

@@ -44,7 +44,9 @@ defmodule WSE.MixProject do
       {:bcrypt_elixir, "~> 1.0"},
       {:corsica, "~> 1.0"},
       {:mongodb, ">= 0.4.7"},
-      {:poolboy, ">= 1.5.2"}
+      {:poolboy, ">= 1.5.2"},
+      {:tesla, "~> 1.2.0"},
+      {:hackney, "~> 1.14.0"}
     ]
   end
 

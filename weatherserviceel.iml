@@ -28,5 +28,7 @@
     <orderEntry type="library" name="mongodb" level="project" />
     <orderEntry type="library" name="poolboy" level="project" />
     <orderEntry type="library" name="db_connection" level="project" />
+    <orderEntry type="library" name="tesla" level="project" />
+    <orderEntry type="library" name="hackney" level="project" />
   </component>
 </module>

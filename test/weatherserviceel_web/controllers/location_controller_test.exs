@@ -4,89 +4,81 @@ defmodule WSEWeb.LocationControllerTest do
   alias WSE.Weather.Location
   alias WSE.Weather.LocationRepo
 
-  @create_attrs %{
-    active: true,
-    name: "some name"
-  }
-  @update_attrs %{
-    active: false,
-    name: "some updated name"
-  }
-  @invalid_attrs %{active: nil, name: nil}
-
-  def fixture(:location) do
-    {:ok, location} = LocationRepo.create_location(@create_attrs)
-    location
-  end
-
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
-  describe "index" do
-    test "lists all weather_locations", %{conn: conn} do
-      conn = get(conn, Routes.location_path(conn, :index))
-      assert 1 == json_response(conn, 200)["data"] |> length
+  describe "location search" do
+    test "simple location search", %{conn: conn} do
+      conn = get(conn, Routes.location_path(conn, :query_location, "north pole", lang: "de"))
+      location = json_response(conn, 200)
+      assert %Location{} = location
+      assert "north pole" == String.downcase(location.name)
     end
+"""
+    test "improved location search", %{conn: conn} do
+      conn = get(conn, Routes.location_path(conn, :query_location_v2, "sao paulo", country: "Brazil"))
+      locations = json_response(conn, 200)
+      assert [%Location{}] = locations
+      assert length(locations) > 0
+    end
+    test "location search by id", %{conn: conn} do
+      conn = get(conn, Routes.location_path(conn, :query_location_by_id, 5870294))
+      location = json_response(conn, 200)
+      assert %Location{} = location
+      assert "north pole" == String.downcase(location.name)
+    end
+"""
   end
 
-  describe "create location" do
-    test "renders location when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.location_path(conn, :create), location: @create_attrs)
-      assert %{"id" => id} = json_response(conn, 201)["data"]
-
-      conn = get(conn, Routes.location_path(conn, :show, id))
-
-      assert %{
-               "id" => id,
-               "active" => true,
-               "name" => "some name"
-             } = json_response(conn, 200)["data"]
-    end
-
-    test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.location_path(conn, :create), location: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
-    end
-  end
-
-  describe "update location" do
-    setup [:create_location]
-
-    test "renders location when data is valid", %{conn: conn, location: %Location{id: id} = location} do
-      conn = put(conn, Routes.location_path(conn, :update, location), location: @update_attrs)
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
-
-      conn = get(conn, Routes.location_path(conn, :show, id))
-
-      assert %{
-               "id" => id,
-               "active" => false,
-               "name" => "some updated name"
-             } = json_response(conn, 200)["data"]
-    end
-
-    test "renders errors when data is invalid", %{conn: conn, location: location} do
-      conn = put(conn, Routes.location_path(conn, :update, location), location: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
-    end
-  end
-
-  describe "delete location" do
-    setup [:create_location]
-
-    test "deletes chosen location", %{conn: conn, location: location} do
-      conn = delete(conn, Routes.location_path(conn, :delete, location))
-      assert response(conn, 204)
-
+"""
+  describe "add, modify, delete location by id 5870294 - north pole" do
+    test "add,get,modify,delete 5870294 in order", %{conn: conn} do
+      # delete location if any
+      conn = delete(conn, Routes.location_path(conn, :delete, "5870294"))
+      response(conn, 200)
       assert_error_sent 404, fn ->
-        get(conn, Routes.location_path(conn, :show, location))
+        get(conn, Routes.location_path(conn, :show, "5870294"))
+      end
+
+      # add location
+      conn = put(conn, Routes.location_path(conn, :create, "5870294", lang: "en"))
+      locationAdd = json_response(conn, 200)
+      assert %Location{} = locationAdd
+      assert "en" == String.downcase(locationAdd.fetchLanguageKey)
+
+      # add again & expect error
+      conn = put(conn, Routes.location_path(conn, :create, "5870294", lang: "en"))
+      response(conn, 400)
+
+      # modify fetch language
+      conn = post(conn, Routes.location_path(conn, :update, "5870294", lang: "de"))
+      locationPost = json_response(conn, 200)
+      assert %Location{} = locationPost
+      assert "de" == String.downcase(locationPost.fetchLanguageKey)
+      assert "north pole" == String.downcase(locationPost.name)
+
+      # get location & check modification
+      conn = get(conn, Routes.location_path(conn, :update, "5870294"))
+      locationGet = json_response(conn, 200)
+      assert %Location{} = locationGet
+      assert "de" == String.downcase(locationGet.fetchLanguageKey)
+      assert "north pole" == String.downcase(locationGet.name)
+
+      # get location index
+      conn = get(conn, Routes.location_path(conn, :index))
+      locationIndexList = json_response(conn, 200)
+      assert [%Location{}] = locationIndexList
+      assert "de" == String.downcase(locationIndexList.fetchLanguageKey)
+      assert "north pole" == String.downcase(locationIndexList.name)
+
+      # delete location
+      conn = delete(conn, Routes.location_path(conn, :delete, "5870294"))
+      response(conn, 200)
+      assert_error_sent 404, fn ->
+        get(conn, Routes.location_path(conn, :show, "5870294"))
       end
     end
   end
-
-  defp create_location(_context) do
-    location = fixture(:location)
-    {:ok, location: location}
-  end
+"""
 end
