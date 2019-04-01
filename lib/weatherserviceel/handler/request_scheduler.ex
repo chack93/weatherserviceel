@@ -1,5 +1,4 @@
 defmodule WSE.Handler.RequestLimiter do
-
   use GenServer
 
   def start_link(_opts) do
@@ -14,6 +13,7 @@ defmodule WSE.Handler.RequestLimiter do
         callback.()
       end
     )
+
   # server
   def init(:ok), do: Time.new(0, 0, 0, 0)
 

@@ -1,17 +1,21 @@
-defmodule WSE.Handler.WeatherLocation do
+defmodule WSE.Handler.LocationHandler do
 
-  alias WSE.Handler.RequestScheduler
-  alias WSE.Weather.Location
+  alias WSE.Model.Location
+  alias WSE.Handler.RequestLimiter
 
-  def query_location(query, lang \\ nil), do:
-    RequestScheduler.schedule_next(
+  @doc """
+  Simple location query. Returns a Task to be awaited.
+  iex> Task.await(WSE.Handler.LocationHandler.location_by_query("query", "lang"))
+  %Location{...}
+  """
+  def location_by_query(query, lang \\ nil), do:
+    RequestLimiter.schedule_next(
       fn ->
-        WSE.Api.OpenWeatherMap.current_weather_by_query(query, lang)
-        |> &Location.map_api_response(&1)
+        with {:ok, %{body: body, status: status}} <- WSE.Api.OpenWeatherMap.current_weather_by_query(query, lang) do
+          if status != 200, do: raise WSE.Model.Error.Internal
+          Map.put(body, "languageKey", lang)
+          |> WSE.Model.Location.map_api_response
+        end
       end
     )
-  #WSE.Api.OpenWeatherMap
-  # 1. create api endpoint
-  # 2. fetch location
-  # 3. create limiter
 end

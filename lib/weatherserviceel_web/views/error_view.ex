@@ -26,7 +26,7 @@ defmodule WSEWeb.ErrorView do
     %{errors: %{detail: "Not Found"}}
   end
 
-  def render("401.json", _assigns) do
+  def render("500.json", _assigns) do
     %{errors: %{detail: "Internal Server Error"}}
   end
 end

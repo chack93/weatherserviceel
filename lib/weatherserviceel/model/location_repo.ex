@@ -1,4 +1,4 @@
-defmodule WSE.Weather.LocationRepo do
+defmodule WSE.Model.LocationRepo do
   @moduledoc """
   The Weather context.
   """
@@ -6,7 +6,7 @@ defmodule WSE.Weather.LocationRepo do
 
   import Ecto.Query, warn: false
 
-  alias WSE.Weather.Location
+  alias WSE.Model.Location
 
   @doc """
   Returns the list of weather_locations.
@@ -150,7 +150,7 @@ defmodule WSE.Weather.LocationRepo do
     map
     |> Map.delete("_id")
     |> Map.put("id", BSON.ObjectId.encode!(id))
-    #%{map | "id" => BSON.ObjectId.encode!(map["_id"])}
+      #%{map | "id" => BSON.ObjectId.encode!(map["_id"])}
     |> (&Ecto.Changeset.cast(%Location{}, &1, Location.__schema__(:fields))).()
     |> Ecto.Changeset.apply_changes()
     |> (&{:ok, &1}).()
