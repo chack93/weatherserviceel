@@ -16,27 +16,46 @@ defmodule WSEWeb.LocationControllerTest do
       assert location["countryCode"] != nil
       assert location["fetchLanguageKey"] == "de"
       assert location["forecast"] != nil
-      assert location["locationId"]
-             |> is_integer
+      assert is_integer location["locationId"]
       assert String.downcase(location["name"]) == "north pole"
       assert location["sunrise"] != nil
       assert location["sunset"] != nil
       assert location["weatherCondition"] != nil
     end
-    """
-        test "improved location search", %{conn: conn} do
-          conn = get(conn, Routes.location_path(conn, :query_location_v2, "sao paulo", country: "Brazil"))
-          locations = json_response(conn, 200)
-          assert [%Location{}] = locations
-          assert length(locations) > 0
-        end
-        test "location search by id", %{conn: conn} do
-          conn = get(conn, Routes.location_path(conn, :query_location_by_id, 5870294))
-          location = json_response(conn, 200)
-          assert %Location{} = location
-          assert "north pole" == String.downcase(location.name)
-        end
-    """
+    test "improved location search", %{conn: conn} do
+      conn = get(conn, Routes.location_path(conn, :query_location_v2, "sao paulo", country: "Brazil"))
+      locations = json_response(conn, 200)
+      [%{"origin" => first_origin, "weatherLocationNearby" => nearby_first_result} | tail] = locations
+      assert is_list first_origin["boundingbox"]
+      assert is_bitstring first_origin["category"]
+      assert is_bitstring first_origin["display_name"]
+      assert is_bitstring first_origin["icon"]
+      assert first_origin["importance"] != nil
+      assert first_origin["lat"] != nil
+      assert is_bitstring first_origin["licence"]
+      assert first_origin["lon"] != nil
+      assert is_number first_origin["osm_id"]
+      assert is_bitstring first_origin["osm_type"]
+      assert is_number first_origin["place_id"]
+      assert is_number first_origin["place_rank"]
+      assert is_bitstring first_origin["type"]
+      assert length(locations) > 0
+      assert length(nearby_first_result) > 0
+    end
+    test "location search by id", %{conn: conn} do
+      conn = get(conn, Routes.location_path(conn, :query_location_by_id, 5870294))
+      location = json_response(conn, 200)
+      assert "north pole" == String.downcase(location["city"])
+      assert location["coordinate"] != nil
+      assert location["countryCode"] != nil
+      assert location["fetchLanguageKey"] == nil
+      assert location["forecast"] != nil
+      assert is_integer location["locationId"]
+      assert "north pole" == String.downcase(location["name"])
+      assert location["sunrise"] != nil
+      assert location["sunset"] != nil
+      assert location["weatherCondition"] != nil
+    end
   end
 
   """

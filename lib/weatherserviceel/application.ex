@@ -10,6 +10,7 @@ defmodule WSE.Application do
     # List all child processes to be supervised
     children = [
       {WSE.Handler.RequestLimiter, []},
+      {WSE.Repo.LocationList, []},
       worker(
         Mongo,
         [

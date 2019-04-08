@@ -7,15 +7,26 @@ defmodule WSEWeb.LocationController do
   action_fallback WSEWeb.FallbackController
 
   def query_location(conn, %{"query" => query, "lang" => lang}) do
-    location = Task.await(WSE.Handler.LocationHandler.location_by_query(query, lang), 1000)
+    location = Task.await(WSE.Handler.LocationHandler.location_by_query(query, lang), 30000)
     render(conn, "location.json", location: location)
   end
   def query_location(conn, %{"query" => query}), do:
     query_location(conn, %{"query" => query, "lang" => "en"})
 
-  def query_location(conn, _param), do: %{}
-  def query_location_v2(conn, _param), do: %{}
-  def query_location_by_id(conn, _param), do: %{}
+  def query_location_v2(conn, %{"query" => query, "city" => city}) do
+    locations = Task.await(WSE.Handler.LocationHandler.location_by_query_v2(query, city), 30000)
+    render(conn, "augmented_location_index.json", locations: locations)
+  end
+  def query_location_v2(conn, %{"query" => query}), do:
+    query_location_v2(conn, %{"query" => query, "city" => nil})
+
+  def query_location_by_id(conn, %{"id" => id, "lang" => lang}) do
+    location = Task.await(WSE.Handler.LocationHandler.location_by_id(id, lang), 30000)
+    render(conn, "location.json", location: location)
+  end
+  def query_location_by_id(conn, %{"id" => id}), do:
+    query_location_by_id(conn, %{"id" => id, "lang" => nil})
+
   def index(conn, _param), do: %{}
   def show(conn, _param), do: %{}
   def create(conn, _param), do: %{}

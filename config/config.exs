@@ -15,7 +15,8 @@ config :weatherserviceel,
        :app_config,
        owm_api_key: "",
        request_limiter_period_duration_in_sec: 1,
-       request_limiter_req_per_sec: 1
+       request_limiter_req_per_sec: 1,
+       coordinate_search_tolerance: 0.1
 
 # Configures the endpoint
 config :weatherserviceel,
