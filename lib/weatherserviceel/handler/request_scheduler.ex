@@ -20,7 +20,6 @@ defmodule WSE.Handler.RequestLimiter do
   def handle_call({:schedule_next}, _from, last_call_time) do
     next_allowed_time = Time.add(last_call_time, configured_timeout(), :millisecond)
     delta_ms = Time.diff(next_allowed_time, Time.utc_now, :millisecond)
-    IO.puts("delta: #{delta_ms}")
     if (delta_ms > 0), do:
       :timer.sleep(delta_ms)
 

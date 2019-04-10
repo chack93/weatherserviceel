@@ -1,51 +1,62 @@
 defmodule WSE.Model.Condition do
-  use Ecto.Schema
   alias WSE.Utility
 
-  @derive {Jason.Encoder, only: [:id, :title, :description, :iconKey, :temperatureK, :temperatureC, :temperatureF, :temperatureMinK, :temperatureMinC, :temperatureMinF, :temperatureMaxK, :temperatureMaxC, :temperatureMaxF, :humidity, :pressure, :pressureSea, :pressureGround, :windSpeed, :windDegree, :cloudiness, :rainLastHour, :rainLast3Hour, :snowLastHour, :snowLast3Hour, :visibility, :time]}
-  @primary_key {:id, :id, autogenerate: false}
-  schema "condition" do
-    field :title, :string, default: ""
-    field :description, :string, default: ""
-    field :iconKey, :string, default: ""
-    field :temperatureK, :float, default: 0.0
-    field :temperatureC, :float, default: 0.0
-    field :temperatureF, :float, default: 0.0
-    field :temperatureMinK, :float, default: 0.0
-    field :temperatureMinC, :float, default: 0.0
-    field :temperatureMinF, :float, default: 0.0
-    field :temperatureMaxK, :float, default: 0.0
-    field :temperatureMaxC, :float, default: 0.0
-    field :temperatureMaxF, :float, default: 0.0
-    field :humidity, :float, default: 0.0
-    field :pressure, :float, default: 0.0
-    field :pressureSea, :float, default: 0.0
-    field :pressureGround, :float, default: 0.0
-    field :windSpeed, :float, default: 0.0
-    field :windDegree, :float, default: 0.0
-    field :cloudiness, :float, default: 0.0
-    field :rainLastHour, :float, default: 0.0
-    field :rainLast3Hour, :float, default: 0.0
-    field :snowLastHour, :float, default: 0.0
-    field :snowLast3Hour, :float, default: 0.0
-    field :visibility, :float, default: 0.0
-    field :time, :utc_datetime, default: DateTime.utc_now()
-  end
+  @derive Jason.Encoder
+  defstruct title: "",
+            description: "",
+            iconKey: "",
+            temperatureK: 0.0,
+            temperatureC: 0.0,
+            temperatureF: 0.0,
+            temperatureMinK: 0.0,
+            temperatureMinC: 0.0,
+            temperatureMinF: 0.0,
+            temperatureMaxK: 0.0,
+            temperatureMaxC: 0.0,
+            temperatureMaxF: 0.0,
+            humidity: 0.0,
+            pressure: 0.0,
+            pressureSea: 0.0,
+            pressureGround: 0.0,
+            windSpeed: 0.0,
+            windDegree: 0.0,
+            cloudiness: 0.0,
+            rainLastHour: 0.0,
+            rainLast3Hour: 0.0,
+            snowLastHour: 0.0,
+            snowLast3Hour: 0.0,
+            visibility: 0.0,
+            time: DateTime.utc_now()
 
   def map_api_response(ar), do:
   %WSE.Model.Condition{
     title: hd(ar["weather"])["main"] || "Unknown",
     description: hd(ar["weather"])["description"] || "Unknown",
     iconKey: hd(ar["weather"])["icon"] || "na",
-    temperatureK: ar["main"]["temp"] |> Float.round(2),
-    temperatureC: ar["main"]["temp"] |> Utility.toCelsius |> Float.round(2),
-    temperatureF: ar["main"]["temp"] |> Utility.toFahrenheit |> Float.round(2),
-    temperatureMinK: ar["main"]["temp_min"] |> Float.round(2),
-    temperatureMinC: ar["main"]["temp_min"] |> Utility.toCelsius |> Float.round(2),
-    temperatureMinF: ar["main"]["temp_min"] |> Utility.toFahrenheit |> Float.round(2),
-    temperatureMaxK: ar["main"]["temp_max"] |> Float.round(2),
-    temperatureMaxC: ar["main"]["temp_max"] |> Utility.toCelsius |> Float.round(2),
-    temperatureMaxF: ar["main"]["temp_max"] |> Utility.toFahrenheit |> Float.round(2),
+    temperatureK: ar["main"]["temp"]
+                  |> Float.round(2),
+    temperatureC: ar["main"]["temp"]
+                  |> Utility.toCelsius
+                  |> Float.round(2),
+    temperatureF: ar["main"]["temp"]
+                  |> Utility.toFahrenheit
+                  |> Float.round(2),
+    temperatureMinK: ar["main"]["temp_min"]
+                     |> Float.round(2),
+    temperatureMinC: ar["main"]["temp_min"]
+                     |> Utility.toCelsius
+                     |> Float.round(2),
+    temperatureMinF: ar["main"]["temp_min"]
+                     |> Utility.toFahrenheit
+                     |> Float.round(2),
+    temperatureMaxK: ar["main"]["temp_max"]
+                     |> Float.round(2),
+    temperatureMaxC: ar["main"]["temp_max"]
+                     |> Utility.toCelsius
+                     |> Float.round(2),
+    temperatureMaxF: ar["main"]["temp_max"]
+                     |> Utility.toFahrenheit
+                     |> Float.round(2),
     humidity: ar["main"]["humidity"],
     pressure: ar["main"]["pressure"],
     pressureSea: ar["main"]["sea_level"] || ar["main"]["pressure"],

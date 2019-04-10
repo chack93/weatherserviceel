@@ -1,8 +1,6 @@
 defmodule WSEWeb.LocationControllerTest do
   use WSEWeb.ConnCase
 
-  alias WSE.Model.Location
-
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
@@ -25,7 +23,7 @@ defmodule WSEWeb.LocationControllerTest do
     test "improved location search", %{conn: conn} do
       conn = get(conn, Routes.location_path(conn, :query_location_v2, "sao paulo", country: "Brazil"))
       locations = json_response(conn, 200)
-      [%{"origin" => first_origin, "weatherLocationNearby" => nearby_first_result} | tail] = locations
+      [%{"origin" => first_origin, "weatherLocationNearby" => nearby_first_result} | _tail] = locations
       assert is_list first_origin["boundingbox"]
       assert is_bitstring first_origin["category"]
       assert is_bitstring first_origin["display_name"]
@@ -58,54 +56,57 @@ defmodule WSEWeb.LocationControllerTest do
     end
   end
 
-  """
-    describe "add, modify, delete location by id 5870294 - north pole" do
-      test "add,get,modify,delete 5870294 in order", %{conn: conn} do
-        # delete location if any
-        conn = delete(conn, Routes.location_path(conn, :delete, "5870294"))
-        response(conn, 200)
-        assert_error_sent 404, fn ->
-          get(conn, Routes.location_path(conn, :show, "5870294"))
-        end
+  describe "add, modify, delete location by id 5870294 - north pole" do
+    test "add, get, modify, delete 5870294 in order", %{conn: conn} do
+      IO.puts("delete location if any")
+      delete(conn, Routes.location_path(conn, :delete, "5870294"))
+      assert_error_sent 404, fn ->
+        get(conn, Routes.location_path(conn, :show, "5870294"))
+      end
 
-        # add location
-        conn = put(conn, Routes.location_path(conn, :create, "5870294", lang: "en"))
-        locationAdd = json_response(conn, 200)
-        assert %Location{} = locationAdd
-        assert "en" == String.downcase(locationAdd.fetchLanguageKey)
+      IO.puts("add location")
+      r_conn = put(conn, Routes.location_path(conn, :create, "5870294", lang: "en"))
+      locationAdd = json_response(r_conn, 200)
+      assert "north pole" == String.downcase(locationAdd["city"])
+      assert 5870294 == locationAdd["locationId"]
+      assert "en" == String.downcase(locationAdd["fetchLanguageKey"])
 
-        # add again & expect error
-        conn = put(conn, Routes.location_path(conn, :create, "5870294", lang: "en"))
-        response(conn, 400)
+      IO.puts("add again & expect error")
+      assert_error_sent 400, fn ->
+        put(conn, Routes.location_path(conn, :create, "5870294", lang: "en"))
+      end
 
-        # modify fetch language
-        conn = post(conn, Routes.location_path(conn, :update, "5870294", lang: "de"))
-        locationPost = json_response(conn, 200)
-        assert %Location{} = locationPost
-        assert "de" == String.downcase(locationPost.fetchLanguageKey)
-        assert "north pole" == String.downcase(locationPost.name)
+      IO.puts("modify fetch language")
+      r_conn = post(conn, Routes.location_path(conn, :update, "5870294", lang: "de"))
+      locationPost = json_response(r_conn, 200)
+      assert "north pole" == String.downcase(locationPost["city"])
+      assert 5870294 == locationPost["locationId"]
+      assert "de" == String.downcase(locationPost["fetchLanguageKey"])
+      assert "north pole" == String.downcase(locationPost["city"])
 
-        # get location & check modification
-        conn = get(conn, Routes.location_path(conn, :update, "5870294"))
-        locationGet = json_response(conn, 200)
-        assert %Location{} = locationGet
-        assert "de" == String.downcase(locationGet.fetchLanguageKey)
-        assert "north pole" == String.downcase(locationGet.name)
+      IO.puts("get location & check modification")
+      r_conn = get(conn, Routes.location_path(conn, :show, "5870294"))
+      locationGet = json_response(r_conn, 200)
+      assert "north pole" == String.downcase(locationGet["city"])
+      assert 5870294 == locationGet["locationId"]
+      assert "de" == String.downcase(locationGet["fetchLanguageKey"])
+      assert "north pole" == String.downcase(locationGet["city"])
 
-        # get location index
-        conn = get(conn, Routes.location_path(conn, :index))
-        locationIndexList = json_response(conn, 200)
-        assert [%Location{}] = locationIndexList
-        assert "de" == String.downcase(locationIndexList.fetchLanguageKey)
-        assert "north pole" == String.downcase(locationIndexList.name)
+      IO.puts("get location index")
+      r_conn = get(conn, Routes.location_path(conn, :index))
+      locationIndexList = json_response(r_conn, 200)
+      assert [locationIndexFirst] = locationIndexList
+      assert "north pole" == String.downcase(locationIndexFirst["city"])
+      assert 5870294 == locationIndexFirst["locationId"]
+      assert "de" == String.downcase(locationIndexFirst["fetchLanguageKey"])
+      assert "north pole" == String.downcase(locationIndexFirst["city"])
 
-        # delete location
-        conn = delete(conn, Routes.location_path(conn, :delete, "5870294"))
-        response(conn, 200)
-        assert_error_sent 404, fn ->
-          get(conn, Routes.location_path(conn, :show, "5870294"))
-        end
+      IO.puts("delete location")
+      r_conn = delete(conn, Routes.location_path(conn, :delete, "5870294"))
+      response(r_conn, 200)
+      assert_error_sent 404, fn ->
+        get(conn, Routes.location_path(conn, :show, "5870294"))
       end
     end
-  """
+  end
 end

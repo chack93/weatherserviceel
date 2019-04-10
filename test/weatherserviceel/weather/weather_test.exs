@@ -1,12 +1,12 @@
 defmodule WSE.WeatherTest do
+  """
   use WSE.DataCase
 
-  alias WSE.Model.LocationRepo
+  alias WSE.Repo.LocationRepo
 
   describe "weather_locations" do
     alias WSE.Model.Location
 
-"""
     @valid_attrs %{active: true, name: "some name"}
     @update_attrs %{active: false, name: "some updated name"}
     @invalid_attrs %{active: nil, name: nil}
@@ -63,6 +63,6 @@ defmodule WSE.WeatherTest do
       location = location_fixture()
       assert %Ecto.Changeset{} = LocationRepo.change_location(location)
     end
-"""
   end
+  """
 end

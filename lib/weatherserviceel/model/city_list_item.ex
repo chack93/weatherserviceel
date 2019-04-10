@@ -1,4 +1,5 @@
 defmodule WSE.Model.CityListItem do
+
   @derive Jason.Encoder
   defstruct coordinate: nil, country: nil, id: nil, name: nil
 

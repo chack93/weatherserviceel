@@ -1,4 +1,4 @@
-defmodule WSE.Handler.LocationHandler do
+defmodule WSE.Handler.LocationService do
 
   alias WSE.Model.Location
   alias WSE.Model.Coordinate
@@ -7,7 +7,7 @@ defmodule WSE.Handler.LocationHandler do
 
   @doc """
   Simple location query. Returns a Task to be awaited.
-  iex> Task.await(WSE.Handler.LocationHandler.location_by_query("query", "lang"))
+  iex> Task.await(WSE.Handler.LocationService.location_by_query("query", "lang"))
   %Location{...}
   """
   def location_by_query(query, lang \\ nil), do:
@@ -22,8 +22,8 @@ defmodule WSE.Handler.LocationHandler do
     )
 
   @doc """
-  Search location by id. Returns a Task to be awaited.
-  iex> Task.await(WSE.Handler.LocationHandler.location_by_id(1234, "lang"))
+  Get location by id. Returns a Task to be awaited.
+  iex> Task.await(WSE.Handler.LocationService.location_by_id(1234, "lang"))
   %Location{...}
   """
   def location_by_id(id, lang \\ nil), do:
@@ -40,7 +40,7 @@ defmodule WSE.Handler.LocationHandler do
   @doc """
   Improved location search. Returns a Task to be awaited.
   Returns up to 5 locations matching city/country query & within each, up to 3 weather location nearby.
-  iex> Task.await(WSE.Handler.LocationHandler.location_by_query_v2("city", "country"))
+  iex> Task.await(WSE.Handler.LocationService.location_by_query_v2("city", "country"))
   %Location{...}
   """
   def location_by_query_v2(city, country \\ nil), do:
