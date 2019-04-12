@@ -30,5 +30,19 @@
     <orderEntry type="library" name="db_connection" level="project" />
     <orderEntry type="library" name="tesla" level="project" />
     <orderEntry type="library" name="hackney" level="project" />
+    <orderEntry type="library" name="phoenix" level="project" />
+    <orderEntry type="library" name="phoenix_pubsub" level="project" />
+    <orderEntry type="library" name="phoenix_ecto" level="project" />
+    <orderEntry type="library" name="gettext" level="project" />
+    <orderEntry type="library" name="jason" level="project" />
+    <orderEntry type="library" name="plug_cowboy" level="project" />
+    <orderEntry type="library" name="bcrypt_elixir" level="project" />
+    <orderEntry type="library" name="corsica" level="project" />
+    <orderEntry type="library" name="mongodb" level="project" />
+    <orderEntry type="library" name="poolboy" level="project" />
+    <orderEntry type="library" name="tesla" level="project" />
+    <orderEntry type="library" name="hackney" level="project" />
+    <orderEntry type="library" name="quantum" level="project" />
+    <orderEntry type="library" name="timex" level="project" />
   </component>
 </module>

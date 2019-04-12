@@ -36,8 +36,6 @@ defmodule WSE.MixProject do
       {:phoenix, "~> 1.4.2"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_ecto, "~> 4.0"},
-      #{:ecto_sql, "~> 3.0"},
-      #{:postgrex, ">= 0.0.0"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
@@ -46,6 +44,8 @@ defmodule WSE.MixProject do
       {:mongodb, ">= 0.4.7"},
       {:poolboy, ">= 1.5.2"},
       {:tesla, "~> 1.2.0"},
+      {:quantum, "~> 2.3"},
+      {:timex, "~> 3.0"},
       {:hackney, "~> 1.14.0"}
     ]
   end
@@ -58,8 +58,8 @@ defmodule WSE.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      #"ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      #"ecto.reset": ["ecto.drop", "ecto.setup"],
+      # "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      # "ecto.reset": ["ecto.drop", "ecto.setup"],
     ]
   end
 end

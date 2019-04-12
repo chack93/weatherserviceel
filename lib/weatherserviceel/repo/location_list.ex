@@ -7,10 +7,10 @@ defmodule WSE.Repo.LocationList do
     Agent.start_link(
       fn ->
         Path.join(:code.priv_dir(:weatherserviceel), "city-list.json")
-        |> File.read!
-        |> Jason.decode!
+        |> File.read!()
+        |> Jason.decode!()
         |> Stream.map(&CityListItem.map_file_item/1)
-        |> Enum.to_list
+        |> Enum.to_list()
       end,
       name: __MODULE__
     )
@@ -22,17 +22,15 @@ defmodule WSE.Repo.LocationList do
     requestedLong = coordinate.longitude
 
     Agent.get(__MODULE__, & &1)
-    |> Stream.filter(
-         fn items ->
-           thisLati = items.coordinate.latitude
-           thisLong = items.coordinate.longitude
+    |> Stream.filter(fn items ->
+      thisLati = items.coordinate.latitude
+      thisLong = items.coordinate.longitude
 
-           (requestedLati - tolerance) < thisLati and
-           thisLati < (requestedLati + tolerance) and
-           (requestedLong - tolerance) < thisLong and
-           thisLong < (requestedLong + tolerance)
-         end
-       )
-    |> Enum.to_list
+      requestedLati - tolerance < thisLati and
+        thisLati < requestedLati + tolerance and
+        requestedLong - tolerance < thisLong and
+        thisLong < requestedLong + tolerance
+    end)
+    |> Enum.to_list()
   end
 end

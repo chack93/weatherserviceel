@@ -7,6 +7,7 @@ defmodule WSE.Model.Location do
 
   @collection "weatherDataEl"
   def collection, do: @collection
+
   @keys [
     :id,
     :locationId,
@@ -33,12 +34,14 @@ defmodule WSE.Model.Location do
     field :locationId, :integer, default: ""
     field :name, :string, default: ""
     field :fetchLanguageKey, :string, default: "en"
+
     field :coordinate,
           :map,
           default: %Coordinate{
             latitude: 0.0,
             longitude: 0.0
           }
+
     field :countryCode, :string, default: ""
     field :city, :string, default: ""
     field :weatherCondition, :map, default: nil
@@ -53,31 +56,41 @@ defmodule WSE.Model.Location do
   def changeset(location, params) do
     location
     |> cast(
-         params,
-         @keys
-       )
+      params,
+      @keys
+    )
     |> validate_required([:locationId])
   end
 
-  def map_api_response(ar), do:
-  %WSE.Model.Location{
-    locationId: ar["id"],
-    name: ar["name"],
-    fetchLanguageKey: ar["languageKey"],
-    coordinate: %Coordinate{
-      latitude: ar["coord"]["lat"],
-      longitude: ar["coord"]["lon"]
-    },
-    countryCode: ar["sys"]["country"],
-    city: ar["name"],
-    weatherCondition: Condition.map_api_response(ar),
-    forecast: Forecast.map_api_response(ar),
-    sunrise: ar["sys"]["sunrise"]
-             |> DateTime.from_unix!,
-    sunset: ar["sys"]["sunset"]
-            |> DateTime.from_unix!,
-    lastConditionUpdateTs: nil,
-    lastForecastUpdateTs: nil,
-    fetchSuccessFlag: nil
-  }
+  def map_api_response(ar),
+    do: %WSE.Model.Location{
+      locationId: ar["id"],
+      name: ar["name"],
+      fetchLanguageKey: ar["languageKey"],
+      coordinate: %Coordinate{
+        latitude: ar["coord"]["lat"],
+        longitude: ar["coord"]["lon"]
+      },
+      countryCode: ar["sys"]["country"],
+      city: ar["name"],
+      weatherCondition: Condition.map_api_response(ar),
+      forecast: Forecast.map_api_response(ar),
+      sunrise:
+        ar["sys"]["sunrise"]
+        |> DateTime.from_unix!(),
+      sunset:
+        ar["sys"]["sunset"]
+        |> DateTime.from_unix!(),
+      lastConditionUpdateTs: nil,
+      lastForecastUpdateTs: nil,
+      fetchSuccessFlag: nil
+    }
+
+  def to_map(location) do
+    location
+    |> Map.put(:coordinate, Map.from_struct(location.coordinate || %Coordinate{}))
+    |> Map.put(:weatherCondition, Map.from_struct(location.weatherCondition || %Condition{}))
+    |> Map.put(:forecast, Forecast.to_map(location.forecast))
+    |> Map.from_struct()
+  end
 end
