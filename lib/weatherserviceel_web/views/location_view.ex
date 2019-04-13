@@ -21,4 +21,10 @@ defmodule WSEWeb.LocationView do
   def render("empty.json", _) do
     %{}
   end
+
+  def render("statistic.json", %{memory: memory}) do
+    %{
+      memory: memory
+    }
+  end
 end

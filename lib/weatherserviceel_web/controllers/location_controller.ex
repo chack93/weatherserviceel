@@ -73,4 +73,21 @@ defmodule WSEWeb.LocationController do
     WSE.Service.RefreshScheduler.refresh_weather_data()
     render(conn, "empty.json")
   end
+
+  def statistic(conn, _param) do
+    memory = :erlang.memory()
+    render(conn, "statistic.json", memory: %{
+      total: to_mb(memory[:total]),
+      processes: to_mb(memory[:processes]),
+      processes_used: to_mb(memory[:processes_used]),
+      system: to_mb(memory[:system]),
+      atom: to_mb(memory[:atom]),
+      atom_used: to_mb(memory[:atom_used]),
+      binary: to_mb(memory[:binary]),
+      code: to_mb(memory[:code]),
+      ets: to_mb(memory[:ets])
+    })
+  end
+
+  defp to_mb(byte), do: "#{round(byte / :math.pow(2, 20))} Mb"
 end

@@ -17,5 +17,6 @@ defmodule WSEWeb.Router do
     post "/v1/location/id/:id", LocationController, :update
     delete "/v1/location/id/:id", LocationController, :delete
     get "/v1/trigger-refresh", LocationController, :trigger_refresh
+    get "/v1/statistic", LocationController, :statistic
   end
 end
