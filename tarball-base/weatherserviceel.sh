@@ -13,13 +13,13 @@ load_rc_config ${name}
 : ${weatherserviceel_group:="appuser"}
 
 pidfile="/var/run/$name/$name.pid"
-command="/opt/weatherserviceel/bin/weatherserviceel foreground"
+command="daemon"
 command_args="-r \
 -u ${weatherserviceel_user} \
 -o /var/log/${name}/${name}.log \
 -m 3 \
 -p ${pidfile} \
-${command}"
+/usr/local/bin/bash /opt/${name}/bin/${name} foreground"
 start_precmd=start_prestart
 start_cmd=start_service
 

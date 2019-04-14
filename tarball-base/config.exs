@@ -2,10 +2,10 @@ use Mix.Config
 
 config :weatherserviceel,
        :mongodb_connection,
-       url: "mongodb://nucsrv.lan:27017/weatherserviceEl"
+       url: "mongodb://mongodb.jail:27017/weatherserviceEl"
 
 config :weatherserviceel, WSEWeb.Endpoint,
-  http: [:inet6, port: 8080],
+  http: [port: 8080],
   url: [host: "localhost", port: 8080]
 
 config :weatherserviceel,

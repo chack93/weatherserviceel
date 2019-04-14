@@ -23,8 +23,8 @@ echo "Copying app & set file owner"
 mkdir -p ${INSTALLDIR}
 cp -r ${DIR}/${APPNAME}/* ${INSTALLDIR}
 chmod -R 770 "$INSTALLDIR"
-if [ ! -f "$INSTALLDIR/config.exd" ]; then
-  cp -n "$DIR/config.exs" ${INSTALLDIR}
+if [ ! -f "$INSTALLDIR/config.exs" ]; then
+  cp "$DIR/config.exs" ${INSTALLDIR}
   chmod -R 770 "$INSTALLDIR/config.exs"
 fi
 chown -R root:appuser ${INSTALLDIR}

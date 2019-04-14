@@ -10,7 +10,7 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :weatherserviceel, WSEWeb.Endpoint,
-  http: [:inet6, port: 4000],
+  http: [port: 4000],
   url: [host: "localhost", port: 4000],
   server: true
 
