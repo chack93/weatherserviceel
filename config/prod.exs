@@ -10,9 +10,18 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :weatherserviceel, WSEWeb.Endpoint,
-  http: [:inet6, port: System.get_env("PORT") || 4000],
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  http: [:inet6, port: 4000],
+  url: [host: "localhost", port: 4000],
+  server: true
+
+config :weatherserviceel,
+     :app_config,
+     owm_api_key: "",
+     request_limiter_period_duration_in_sec: 1,
+     request_limiter_req_per_sec: 1,
+     coordinate_search_tolerance: 0.1,
+     refresh_condition_interval_seconds: 43200,
+     refresh_forecast_interval_seconds: 86400
 
 # Do not print debug messages in production
 config :logger, level: :info

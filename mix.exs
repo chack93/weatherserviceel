@@ -46,7 +46,8 @@ defmodule WSE.MixProject do
       {:tesla, "~> 1.2.0"},
       {:quantum, "~> 2.3"},
       {:timex, "~> 3.0"},
-      {:hackney, "~> 1.14.0"}
+      {:hackney, "~> 1.14.0"},
+      {:distillery, "~> 2.0"}
     ]
   end
 

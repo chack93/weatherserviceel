@@ -21,6 +21,7 @@ erl_crash.dump
 
 # Ignore package tarball (built via "mix hex.build").
 weatherserviceel-*.tar
+weatherserviceel-*.tar.gz
 
 # Since we are building assets from assets/,
 # we ignore priv/static. You may want to comment
