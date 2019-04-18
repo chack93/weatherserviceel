@@ -1,8 +1,8 @@
 use Mix.Config
 
 config :weatherserviceel, WSEWeb.Endpoint,
-  http: [port: 8080],
-  url: [host: "nucsrv.lan", port: 8080],
+  http: [port: 7030],
+  url: [host: "nucsrv.lan", port: 7030],
   server: true
 
 config :weatherserviceel,
