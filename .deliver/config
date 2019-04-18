@@ -6,7 +6,7 @@ BUILD_AT="/tmp/edeliver/weatherserviceel"
 
 STAGING_HOSTS="e_buildstage_jail"
 STAGING_USER="builder"
-DELIVER_TO="/home/builder/builds"
+TEST_AT="/home/builder/builds"
 
 PRODUCTION_HOSTS="e_runtime_jail"
 PRODUCTION_USER="appuser"
