@@ -18,4 +18,3 @@ config :weatherserviceel,
   refresh_forecast_interval_seconds: 86400
 
 config :logger, level: :info
-

@@ -39,9 +39,6 @@ environment :prod do
   set include_src: false
   set cookie: :"?y2X]tF,}lff7UMZ,C2UUbT/;O6WguZQzB=uWvaa*E^{G5h$x/c_@bb?r{Yiq1$f"
   set vm_args: "rel/vm.args"
-  set config_providers: [
-    {Mix.Releases.Config.Providers.Elixir, ["${RELEASE_ROOT_DIR}/config.exs"]}
-  ]
 end
 
 # You may define one or more releases in this file.

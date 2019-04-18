@@ -22,11 +22,9 @@ fi
 echo "Copying app & set file owner"
 mkdir -p ${INSTALLDIR}
 cp -r ${DIR}/${APPNAME}/* ${INSTALLDIR}
+cp -n "$DIR/config.exs" ${INSTALLDIR}
 chmod -R 770 "$INSTALLDIR"
-if [ ! -f "$INSTALLDIR/config.exs" ]; then
-  cp "$DIR/config.exs" ${INSTALLDIR}
-  chmod -R 770 "$INSTALLDIR/config.exs"
-fi
+chmod -R 770 "$INSTALLDIR/config.exs"
 chown -R root:appuser ${INSTALLDIR}
 
 # install dependencies

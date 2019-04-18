@@ -37,3 +37,4 @@ weatherserviceel-*.tar.gz
 /config/*.secret.exs
 
 .elixir_ls
+.deliver/releases/

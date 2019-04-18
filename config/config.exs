@@ -46,7 +46,7 @@ config :logger,
        :console,
        format: "$time $metadata[$level] $message\n",
        metadata: [:request_id],
-       level: :warn
+       level: :debug
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason

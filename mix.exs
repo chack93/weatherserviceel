@@ -20,7 +20,7 @@ defmodule WSE.MixProject do
   def application do
     [
       mod: {WSE.Application, []},
-      extra_applications: [:logger, :runtime_tools, :mongodb, :poolboy]
+      extra_applications: [:logger, :runtime_tools, :mongodb, :poolboy, :edeliver]
     ]
   end
 
@@ -47,7 +47,8 @@ defmodule WSE.MixProject do
       {:quantum, "~> 2.3"},
       {:timex, "~> 3.0"},
       {:hackney, "~> 1.14.0"},
-      {:distillery, "~> 2.0"}
+      {:distillery, "~> 2.0"},
+      {:edeliver, ">= 1.6.0"}
     ]
   end
 

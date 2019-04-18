@@ -1,0 +1,20 @@
+APP="weatherserviceel"
+
+BUILD_HOST="e_buildstage_jail"
+BUILD_USER="builder"
+BUILD_AT="/tmp/edeliver/weatherserviceel"
+
+STAGING_HOSTS="e_buildstage_jail"
+STAGING_USER="builder"
+DELIVER_TO="/home/builder/builds"
+
+# symlink prod.secret.exs to our tmp source
+pre_erlang_get_and_update_deps() {
+  local _prod_secret_path="/home/builder/prod_secret/prod.secret.exs"
+    if [ "$TARGET_MIX_ENV" = "prod" ]; then
+    __sync_remote "
+      ln -sfn '$_prod_secret_path' '$BUILD_AT/config/prod.secret.exs'
+    "
+  fi
+}
+
