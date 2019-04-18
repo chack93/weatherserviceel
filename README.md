@@ -1,17 +1,14 @@
 # WSE
 
 ## Fetch dependencies
-```bash
-mix deps.get
-```
+    mix deps.get
 
 ## Start server
-```bash
-mix phx.server
-```
+    mix phx.server
 
 ## Create release
-```bash
-mix deps.get --only prod; MIX_ENV=prod mix release
-```
+    mix edeliver update
+
+## Deploy release
+    mix edeliver deploy release to production
 
