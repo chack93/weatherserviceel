@@ -8,6 +8,10 @@ STAGING_HOSTS="e_buildstage_jail"
 STAGING_USER="builder"
 DELIVER_TO="/home/builder/builds"
 
+PRODUCTION_HOSTS="e_runtime_jail"
+PRODUCTION_USER="appuser"
+DELIVER_TO="/home/appuser/apps/weatherserviceel"
+
 # symlink prod.secret.exs to our tmp source
 pre_erlang_get_and_update_deps() {
   local _prod_secret_path="/home/builder/prod_secret/prod.secret.exs"
