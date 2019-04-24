@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+
+. /etc/rc.subr
+
+name=weatherserviceel
+desc="WeatherserviceEl fetcher & api"
+rcvar=weatherserviceel_enable
+
+load_rc_config ${name}
+: ${weatherserviceel_enable:="NO"}
+: ${weatherserviceel_user:="appuser"}
+: ${weatherserviceel_group:="appuser"}
+
+start_cmd="weatherserviceel_start"
+stop_cmd="weatherserviceel_stop"
+
+weatherserviceel_start()
+{
+    bash /home/appuser/apps/weatherserviceel/weatherserviceel/bin/weatherserviceel start
+}
+
+weatherserviceel_stop()
+{
+    bash /home/appuser/apps/weatherserviceel/weatherserviceel/bin/weatherserviceel stop
+}
+
+run_rc_command "$1"
