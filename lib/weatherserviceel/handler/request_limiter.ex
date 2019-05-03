@@ -1,4 +1,5 @@
 defmodule WSE.Service.RequestLimiter do
+  require Logger
   use GenServer
 
   def start_link(_opts) do
@@ -19,6 +20,7 @@ defmodule WSE.Service.RequestLimiter do
   def handle_call({:schedule_next}, _from, last_call_time) do
     next_allowed_time = Time.add(last_call_time, configured_timeout(), :millisecond)
     delta_ms = Time.diff(next_allowed_time, Time.utc_now(), :millisecond)
+    Logger.info("RequestLimiter - next execution in #{delta_ms}ms")
     if delta_ms > 0, do: :timer.sleep(delta_ms)
 
     now = Time.utc_now()
