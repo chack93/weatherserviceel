@@ -81,10 +81,12 @@ defmodule WSE.Repo.LocationRepo do
     if changeset.valid? do
       if location_exists?(changeset.changes.locationId), do: raise(WSE.Model.Error.BadRequest)
 
+      # won't find any location to replace
+      # but will upsert & return stored location in one go, compared to insert_one
       Mongo.find_one_and_replace(
         :mongodb_pool,
         Location.collection(),
-        %{},
+        %{locationId: changeset.changes.locationId},
         changeset.changes,
         return_document: :after,
         upsert: true,

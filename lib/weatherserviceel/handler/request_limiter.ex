@@ -22,8 +22,10 @@ defmodule WSE.Service.RequestLimiter do
     delta_ms = Time.diff(next_allowed_time, Time.utc_now(), :millisecond)
     # prevent infinite waiting, limit wait to 10 minutes
     delta_ms_save = rem(delta_ms, 1000 * 60 * 10)
-    Logger.info("RequestLimiter - next execution in #{delta_ms_save}ms")
-    if delta_ms_save > 0, do: :timer.sleep(delta_ms_save)
+    if delta_ms_save > 0 do
+      Logger.info("RequestLimiter - next execution in #{delta_ms_save}ms")
+      :timer.sleep(delta_ms_save)
+    end
 
     now = Time.utc_now()
     {:reply, now, now}
